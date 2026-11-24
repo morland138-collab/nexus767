@@ -1,0 +1,1105 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="apple-mobile-web-app-title" content="NEXUS767">
+<title>NEXUS767 • AeroNexus B767-300ER Flight Deck Suite</title>
+<style>
+  :root {
+    --bg: #0b1120;
+    --card: #131c31;
+    --card-alt: #1a2540;
+    --border: #2a3958;
+    --text: #f1f5f9;
+    --muted: #94a3b8;
+    --accent: #38bdf8;
+    --accent-dark: #0284c7;
+    --gold: #fbbf24;
+    --green: #22c55e;
+    --red: #ef4444;
+    --red-bg: rgba(239, 68, 68, 0.14);
+  }
+  body.night-mode {
+    --bg: #050000;
+    --card: #120202;
+    --card-alt: #1d0404;
+    --border: #450a0a;
+    --text: #fca5a5;
+    --muted: #b91c1c;
+    --accent: #ef4444;
+    --accent-dark: #991b1b;
+    --gold: #f87171;
+    --green: #dc2626;
+    --red: #ff3b3b;
+    --red-bg: rgba(220, 38, 38, 0.2);
+  }
+  * { box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
+  body {
+    margin: 0;
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+    background: var(--bg);
+    color: var(--text);
+    padding-bottom: 40px;
+    line-height: 1.45;
+  }
+  /* Hero Header */
+  .hero {
+    background: linear-gradient(135deg, #0f172a 0%, #1e293b 60%, #0c4a6e 100%);
+    border-bottom: 2px solid var(--accent);
+    padding: 16px 18px;
+    position: sticky;
+    top: 0;
+    z-index: 100;
+    box-shadow: 0 4px 20px rgba(0,0,0,0.45);
+  }
+  body.night-mode .hero {
+    background: linear-gradient(135deg, #0a0000 0%, #1f0303 100%);
+    border-bottom-color: var(--red);
+  }
+  .hero-top {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: space-between;
+    gap: 12px;
+  }
+  .brand-box {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+  }
+  .brand-badge {
+    width: 44px;
+    height: 44px;
+    border-radius: 10px;
+    background: linear-gradient(135deg, var(--accent), var(--gold));
+    color: #0b1120;
+    font-weight: 900;
+    font-size: 16px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    letter-spacing: -0.5px;
+    box-shadow: 0 0 15px rgba(56, 189, 248, 0.4);
+  }
+  .brand-title {
+    font-size: 26px;
+    font-weight: 900;
+    letter-spacing: 1.5px;
+    background: linear-gradient(90deg, #ffffff, var(--accent), var(--gold));
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    line-height: 1.1;
+  }
+  body.night-mode .brand-title {
+    background: none;
+    -webkit-text-fill-color: var(--red);
+  }
+  .brand-sub {
+    font-size: 11px;
+    color: var(--gold);
+    font-weight: 700;
+    letter-spacing: 0.8px;
+    text-transform: uppercase;
+  }
+  .controls-bar {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 8px;
+  }
+  .zulu-box {
+    background: rgba(0,0,0,0.45);
+    border: 1px solid var(--border);
+    padding: 6px 10px;
+    border-radius: 8px;
+    font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
+    font-size: 13px;
+    font-weight: 700;
+    color: var(--gold);
+  }
+  .seat-toggle {
+    display: flex;
+    background: rgba(0,0,0,0.45);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    overflow: hidden;
+  }
+  .seat-btn {
+    border: none;
+    background: transparent;
+    color: var(--muted);
+    padding: 7px 11px;
+    font-size: 12px;
+    font-weight: 700;
+    cursor: pointer;
+  }
+  .seat-btn.active {
+    background: var(--accent);
+    color: #0b1120;
+  }
+  .night-btn {
+    border: 1px solid var(--border);
+    background: rgba(0,0,0,0.45);
+    color: var(--text);
+    padding: 7px 10px;
+    border-radius: 8px;
+    font-size: 12px;
+    font-weight: 700;
+    cursor: pointer;
+  }
+  /* Navigation Tabs */
+  .nav-tabs {
+    display: flex;
+    overflow-x: auto;
+    gap: 6px;
+    padding: 12px 16px 6px;
+    background: var(--bg);
+    border-bottom: 1px solid var(--border);
+    scrollbar-width: none;
+  }
+  .nav-tabs::-webkit-scrollbar { display: none; }
+  .tab-btn {
+    flex: 0 0 auto;
+    background: var(--card);
+    color: var(--muted);
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    padding: 10px 14px;
+    font-size: 13px;
+    font-weight: 700;
+    cursor: pointer;
+    transition: 0.15s;
+  }
+  .tab-btn.active {
+    background: var(--accent);
+    color: #0b1120;
+    border-color: var(--accent);
+  }
+  .container {
+    max-width: 1020px;
+    margin: 0 auto;
+    padding: 14px 16px;
+  }
+  .tab-panel { display: none; }
+  .tab-panel.active { display: block; }
+
+  /* Cards & Grids */
+  .grid-2 {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    gap: 14px;
+  }
+  .card {
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    padding: 15px;
+    margin-bottom: 14px;
+  }
+  .card h3 {
+    margin: 0 0 10px;
+    font-size: 15px;
+    color: var(--accent);
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+  }
+  .badge {
+    font-size: 11px;
+    background: var(--card-alt);
+    border: 1px solid var(--border);
+    color: var(--gold);
+    padding: 2px 8px;
+    border-radius: 999px;
+  }
+  .input-row {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 8px;
+    margin-bottom: 10px;
+  }
+  .field label {
+    display: block;
+    font-size: 11px;
+    color: var(--muted);
+    margin-bottom: 3px;
+    font-weight: 600;
+  }
+  .field input, .field select, textarea {
+    width: 100%;
+    background: var(--bg);
+    border: 1px solid var(--border);
+    color: var(--text);
+    padding: 8px 10px;
+    border-radius: 8px;
+    font-size: 14px;
+    font-weight: 600;
+  }
+  .result-box {
+    background: var(--card-alt);
+    border-left: 3px solid var(--accent);
+    padding: 10px 12px;
+    border-radius: 8px;
+    font-size: 13px;
+    font-weight: 700;
+  }
+  .result-box span { color: var(--gold); font-size: 15px; }
+
+  /* Buttons */
+  .btn {
+    background: var(--accent);
+    color: #0b1120;
+    border: none;
+    border-radius: 8px;
+    padding: 9px 14px;
+    font-size: 13px;
+    font-weight: 800;
+    cursor: pointer;
+  }
+  .btn-outline {
+    background: transparent;
+    color: var(--text);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    padding: 8px 12px;
+    font-size: 12px;
+    font-weight: 700;
+    cursor: pointer;
+  }
+  .btn-danger {
+    background: var(--red);
+    color: #fff;
+    border: none;
+    border-radius: 8px;
+    padding: 8px 12px;
+    font-size: 12px;
+    font-weight: 700;
+    cursor: pointer;
+  }
+
+  /* Flows */
+  .phase-pills {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 6px;
+    margin-bottom: 12px;
+  }
+  .pill {
+    background: var(--card);
+    border: 1px solid var(--border);
+    color: var(--muted);
+    padding: 6px 11px;
+    border-radius: 999px;
+    font-size: 12px;
+    font-weight: 700;
+    cursor: pointer;
+  }
+  .pill.active {
+    background: var(--gold);
+    color: #0b1120;
+    border-color: var(--gold);
+  }
+  .flow-item {
+    display: flex;
+    align-items: flex-start;
+    gap: 10px;
+    padding: 10px;
+    border-radius: 8px;
+    background: var(--card-alt);
+    margin-bottom: 8px;
+    cursor: pointer;
+    border: 1px solid transparent;
+  }
+  .flow-item.done {
+    opacity: 0.55;
+    border-color: var(--green);
+  }
+  .flow-check {
+    width: 20px;
+    height: 20px;
+    border-radius: 5px;
+    border: 2px solid var(--accent);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+    margin-top: 2px;
+    font-weight: 900;
+    font-size: 13px;
+  }
+  .flow-item.done .flow-check {
+    background: var(--green);
+    border-color: var(--green);
+    color: #0b1120;
+  }
+  .panel-tag {
+    display: inline-block;
+    font-size: 10px;
+    font-weight: 800;
+    padding: 1px 6px;
+    border-radius: 4px;
+    background: rgba(56, 189, 248, 0.18);
+    color: var(--accent);
+    margin-right: 6px;
+  }
+
+  /* Memory Items */
+  .mem-card {
+    background: var(--card);
+    border: 1px solid var(--red);
+    border-left: 5px solid var(--red);
+    border-radius: 10px;
+    padding: 14px;
+    margin-bottom: 12px;
+  }
+  .mem-title {
+    font-weight: 800;
+    color: var(--red);
+    font-size: 15px;
+    margin-bottom: 6px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+  .mem-steps {
+    margin: 0;
+    padding-left: 18px;
+    font-size: 13.5px;
+  }
+  .mem-steps li { margin-bottom: 5px; }
+  .blurred {
+    filter: blur(6px);
+    user-select: none;
+    cursor: pointer;
+  }
+
+  /* Quick Read Table */
+  table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 12.5px;
+    margin-top: 8px;
+  }
+  th, td {
+    border: 1px solid var(--border);
+    padding: 8px;
+    text-align: left;
+    vertical-align: top;
+  }
+  th {
+    background: var(--card-alt);
+    color: var(--accent);
+  }
+
+  /* Trivia */
+  .quiz-opt {
+    display: block;
+    width: 100%;
+    text-align: left;
+    background: var(--card-alt);
+    color: var(--text);
+    border: 1px solid var(--border);
+    padding: 11px 14px;
+    border-radius: 9px;
+    margin-bottom: 8px;
+    font-size: 13.5px;
+    font-weight: 600;
+    cursor: pointer;
+  }
+  .quiz-opt.correct { background: rgba(34, 197, 94, 0.25); border-color: var(--green); }
+  .quiz-opt.wrong { background: rgba(239, 68, 68, 0.25); border-color: var(--red); }
+  .score-board {
+    display: flex;
+    justify-content: space-around;
+    background: var(--card-alt);
+    padding: 12px;
+    border-radius: 10px;
+    margin-bottom: 14px;
+    border: 1px solid var(--border);
+  }
+</style>
+</head>
+<body>
+
+<header class="hero">
+  <div class="hero-top">
+    <div class="brand-box">
+      <div class="brand-badge">767</div>
+      <div>
+        <div class="brand-title">NEXUS767</div>
+        <div class="brand-sub">AeroNexus Flight Ops • ZS-NEX (B767-35D ER)</div>
+      </div>
+    </div>
+    <div class="controls-bar">
+      <div class="zulu-box" id="zuluClock">UTC 00:00:00Z</div>
+      <div class="seat-toggle">
+        <button type="button" class="seat-btn active" id="btnCapt" onclick="setSeat('CAPT')">L SEAT (CAPT)</button>
+        <button type="button" class="seat-btn" id="btnFO" onclick="setSeat('FO')">R SEAT (F/O)</button>
+      </div>
+      <button type="button" class="night-btn" onclick="toggleNight()">RED NIGHT</button>
+    </div>
+  </div>
+</header>
+
+<nav class="nav-tabs">
+  <button type="button" class="tab-btn active" data-tab="dash" onclick="openTab('dash', this)">Dashboard & Tools</button>
+  <button type="button" class="tab-btn" data-tab="flows" onclick="openTab('flows', this)">Normal Flows</button>
+  <button type="button" class="tab-btn" data-tab="memory" onclick="openTab('memory', this)">QRH Memory Items</button>
+  <button type="button" class="tab-btn" data-tab="guide" onclick="openTab('guide', this)">Quick-Read EFB Guide</button>
+  <button type="button" class="tab-btn" data-tab="etops" onclick="openTab('etops', this)">Crew Rest & ETOPS</button>
+  <button type="button" class="tab-btn" data-tab="game" onclick="openTab('game', this)">2-Crew Showdown</button>
+</nav>
+
+<main class="container">
+
+  <!-- TAB 1: DASHBOARD & TOOLS -->
+  <section id="tab-dash" class="tab-panel active">
+    <div class="card">
+      <h3>ZS-NEX Quick Airframe Strip <span class="badge">GE CF6-80C2B6 • ETOPS-180</span></h3>
+      <div style="font-size:13px; color:var(--muted);">
+        <strong>REG:</strong> ZS-NEX (MSN 24865) &nbsp;|&nbsp;
+        <strong>SELCAL:</strong> <span style="color:var(--gold); font-weight:800;">LQ-GK</span> &nbsp;|&nbsp;
+        <strong>TAILSTRIKE PITCH:</strong> <span style="color:var(--red); font-weight:800;">9.5° (Strut Compressed)</span> &nbsp;|&nbsp;
+        <strong>APU FEED:</strong> Left Main Tank
+      </div>
+    </div>
+
+    <div class="grid-2">
+      <!-- 3:1 TOD -->
+      <div class="card">
+        <h3>3:1 Top of Descent & V/S <span class="badge">DESCENT</span></h3>
+        <div class="input-row">
+          <div class="field"><label>Cruise Alt (ft)</label><input type="number" id="todStart" value="37000" oninput="calcTOD()"></div>
+          <div class="field"><label>Target Alt (ft)</label><input type="number" id="todEnd" value="3000" oninput="calcTOD()"></div>
+        </div>
+        <div class="input-row">
+          <div class="field"><label>Ground Speed (kt)</label><input type="number" id="todGS" value="460" oninput="calcTOD()"></div>
+          <div class="field"><label>Tailwind (+) / Head (-)</label><input type="number" id="todWind" value="20" oninput="calcTOD()"></div>
+        </div>
+        <div class="result-box" id="todOut">TOD Distance: <span>104 NM</span> &nbsp;|&nbsp; Target V/S: <span>2,300 fpm</span></div>
+      </div>
+
+      <!-- Crosswind -->
+      <div class="card">
+        <h3>Runway Wind Components <span class="badge">LIMITS</span></h3>
+        <div class="input-row">
+          <div class="field"><label>Runway Heading (°M)</label><input type="number" id="rwyHdg" value="210" oninput="calcWind()"></div>
+          <div class="field"><label>Wind Direction (°M)</label><input type="number" id="windDir" value="250" oninput="calcWind()"></div>
+        </div>
+        <div class="input-row">
+          <div class="field"><label>Wind Speed (kt)</label><input type="number" id="windSpd" value="24" oninput="calcWind()"></div>
+          <div class="field"><label>Condition</label><select id="rwyCond" onchange="calcWind()"><option value="38">Dry (38 kt Max)</option><option value="29">Wet (29 kt Max)</option><option value="15">Standing Water/Snow (15 kt)</option></select></div>
+        </div>
+        <div class="result-box" id="windOut">Crosswind: <span>15 kt (Right)</span> &nbsp;|&nbsp; Headwind: <span>18 kt</span></div>
+      </div>
+
+      <!-- Fuel Uplift -->
+      <div class="card">
+        <h3>Fuel Uplift & KG ↔ LBS <span class="badge">REFUEL</span></h3>
+        <div class="input-row">
+          <div class="field"><label>Required Block (kg)</label><input type="number" id="fuelReq" value="48000" oninput="calcFuel()"></div>
+          <div class="field"><label>Remaining FOB (kg)</label><input type="number" id="fuelRem" value="9500" oninput="calcFuel()"></div>
+        </div>
+        <div class="input-row">
+          <div class="field"><label>Fuel Density (SG)</label><input type="number" step="0.01" id="fuelSG" value="0.80" oninput="calcFuel()"></div>
+          <div class="field"><label>Block in LBS</label><input type="text" id="fuelLbs" readonly value="105,822 lbs"></div>
+        </div>
+        <div class="result-box" id="fuelOut">Uplift Needed: <span>38,500 kg</span> &nbsp;|&nbsp; <span>48,125 L</span> (12,713 USG)</div>
+      </div>
+
+      <!-- ISA & Cold Temp -->
+      <div class="card">
+        <h3>ISA Dev & Cold Temp Corr <span class="badge">ALTITUDE</span></h3>
+        <div class="input-row">
+          <div class="field"><label>Flight Level (e.g. 350)</label><input type="number" id="isaFL" value="350" oninput="calcISA()"></div>
+          <div class="field"><label>OAT / SAT (°C)</label><input type="number" id="isaOAT" value="-48" oninput="calcISA()"></div>
+        </div>
+        <div class="input-row">
+          <div class="field"><label>Aerodrome Temp (°C)</label><input type="number" id="coldTemp" value="-10" oninput="calcISA()"></div>
+          <div class="field"><label>Height Above AD (ft)</label><input type="number" id="coldHgt" value="2000" oninput="calcISA()"></div>
+        </div>
+        <div class="result-box" id="isaOut">ISA Dev: <span>ISA +6°C</span> &nbsp;|&nbsp; Cold Temp Add: <span>+200 ft</span></div>
+      </div>
+    </div>
+
+    <div class="card">
+      <h3>Flight Deck Clearance Scratchpad <span class="badge">AUTO-SAVED</span></h3>
+      <textarea id="scratchpad" rows="3" placeholder="ATIS / Squawk / Initial Alt / Oceanic Clearance / SELCAL check..." oninput="saveScratch()"></textarea>
+    </div>
+  </section>
+
+  <!-- TAB 2: NORMAL FLOWS -->
+  <section id="tab-flows" class="tab-panel">
+    <div class="card">
+      <h3>
+        <span id="flowHeaderTitle">Captain Normal Flows (Left-to-Right Scan)</span>
+        <button type="button" class="btn-outline" onclick="resetFlows()">Reset All Checks</button>
+      </h3>
+      <div class="phase-pills" id="phasePills"></div>
+      <div id="flowList"></div>
+    </div>
+  </section>
+
+  <!-- TAB 3: QRH MEMORY ITEMS -->
+  <section id="tab-memory" class="tab-panel">
+    <div class="card">
+      <h3>
+        Boeing 767-300ER QRH Memory Items
+        <button type="button" class="btn" id="drillToggleBtn" onclick="toggleDrillMode()">Enable Recall Drill (Blur Steps)</button>
+      </h3>
+      <p style="font-size:12.5px; color:var(--muted); margin-top:0;">Tap any blurred card during Drill Mode to reveal and verify your recall. Always confirm seat PF/PM actions per Boeing SOP.</p>
+    </div>
+    <div id="memoryContainer"></div>
+  </section>
+
+  <!-- TAB 4: QUICK-READ GUIDE -->
+  <section id="tab-guide" class="tab-panel">
+    <div class="card">
+      <h3>Quick-Read EFB Reference Guide <span class="badge">ZS-NEX</span></h3>
+      <input type="text" id="guideSearch" placeholder="Search SOPs (e.g., tailstrike, APU, ETOPS, recall, relief)..." oninput="filterGuide()" style="width:100%; padding:10px; border-radius:8px; border:1px solid var(--border); background:var(--bg); color:var(--text); font-size:14px;">
+    </div>
+
+    <div class="card guide-block">
+      <h3>1. PF vs. PM Task-Sharing Matrix (Boeing SOP)</h3>
+      <table>
+        <thead><tr><th>Phase</th><th>Pilot Flying (PF)</th><th>Pilot Monitoring (PM)</th></tr></thead>
+        <tbody>
+          <tr><td><strong>Preflight</strong></td><td>CDU Preflight & Performance setup, MCP check, Takeoff Briefing.</td><td>Preliminary & Electrical/Hyd/Fuel/Air Overhead Scan, FMC cross-check, EICAS Recall.</td></tr>
+          <tr><td><strong>Taxi & Takeoff</strong></td><td>Thrust levers, directional control, rotate at VR (max 2.5–3°/sec to avoid -300 tailstrike).</td><td>ATC comms, Flaps, Takeoff config check, 80 kt / V1 / VR callouts, Gear Up on positive rate.</td></tr>
+          <tr><td><strong>Cruise / ETOPS</strong></td><td>Autopilot/MCP management, weather radar tilt, ETP fuel/wind monitoring.</td><td>Oceanic plotting/way-point checks (10-min/2°), HF/SELCAL (LQ-GK), augmented crew relief log.</td></tr>
+          <tr><td><strong>Approach & Landing</strong></td><td>Autopilot/Flight Director tracking, flare & rollout, reversers & autobrake monitor.</td><td>Approach checklist, Flap extensions, Missed Approach alt set, Landing checklist, 60 kt callout.</td></tr>
+          <tr><td><strong>Non-Normal</strong></td><td><strong>"Fly the airplane"</strong> — Aviate, Navigate, Communicate, call for Memory Items & QRH.</td><td>Execute Memory Items (with PF confirmation), read QRH checklist, manage radios & EICAS.</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <div class="card guide-block">
+      <h3>2. Infrequent Flyer Traps & ZS-NEX Specifics</h3>
+      <ul style="font-size:13px; padding-left:18px; margin:0;">
+        <li style="margin-bottom:6px;"><strong>B767-300 Tailstrike Margin:</strong> The -300 fuselage stretch reduces tail clearance to <strong>9.5°</strong> on oleo compression. Smooth rotation (2.5°–3°/sec) and avoid over-flaring on landing.</li>
+        <li style="margin-bottom:6px;"><strong>APU Fuel Feed:</strong> APU draws fuel from the <strong>Left Main Tank</strong>. Always ensure Left Aft/Fwd boost pump is ON before starting the APU to prevent suction-feed airlocks.</li>
+        <li style="margin-bottom:6px;"><strong>Hydraulic Demand Pumps:</strong> Left & Right Elec Demand pumps stay <strong>AUTO</strong>; Center 1 & 2 Elec pumps stay <strong>OFF</strong> until Before Start pushback to avoid fluid overheat.</li>
+        <li style="margin-bottom:6px;"><strong>EICAS Recall Discipline:</strong> Press <strong>CANC/RCL</strong> prior to takeoff and approach—never launch with unverified status or advisory messages hidden in the recall buffer.</li>
+        <li><strong>Augmented Crew Relief Briefing:</strong> Conduct a structured 5-minute handover covering current ETP, fuel score, MEL items, wake-up criteria, and seat-reoccupation triggers before entering the bunk.</li>
+      </ul>
+    </div>
+  </section>
+
+  <!-- TAB 5: CREW REST & ETOPS -->
+  <section id="tab-etops" class="tab-panel">
+    <div class="grid-2">
+      <div class="card">
+        <h3>In-Flight Elapsed Timer <span class="badge">BLOCK / FLIGHT</span></h3>
+        <div style="font-family:monospace; font-size:32px; font-weight:900; color:var(--gold); text-align:center; padding:12px 0;" id="flightTimerDisplay">00:00:00</div>
+        <div style="display:flex; gap:8px; justify-content:center;">
+          <button type="button" class="btn" onclick="startTimer()">Start / Resume</button>
+          <button type="button" class="btn-outline" onclick="pauseTimer()">Pause</button>
+          <button type="button" class="btn-danger" onclick="resetTimer()">Reset</button>
+        </div>
+      </div>
+
+      <div class="card">
+        <h3>Augmented Crew Rest Splitter <span class="badge">LONG-HAUL</span></h3>
+        <div class="input-row">
+          <div class="field"><label>Total Cruise Window (mins)</label><input type="number" id="restTotal" value="360" oninput="calcRest()"></div>
+          <div class="field"><label>Crew Complement</label><select id="restCrew" onchange="calcRest()"><option value="3">3 Pilots (2 Breaks)</option><option value="4">4 Pilots (2 Paired Breaks)</option></select></div>
+        </div>
+        <div class="input-row">
+          <div class="field"><label>Handover Buffer / Break (mins)</label><input type="number" id="restBuf" value="10" oninput="calcRest()"></div>
+          <div class="field"><label>Start Time (UTC HH:MM)</label><input type="text" id="restStart" value="01:30" oninput="calcRest()"></div>
+        </div>
+        <div class="result-box" id="restOut">Break 1: <span>01:30 – 04:20 (170m)</span><br>Break 2: <span>04:30 – 07:20 (170m)</span></div>
+      </div>
+    </div>
+
+    <div class="card">
+      <h3>ETOPS-180 & Oceanic Crossing Tracker</h3>
+      <div class="flow-item" onclick="this.classList.toggle('done')"><div class="flow-check">✓</div><div><strong>1 Hour Prior to EEP:</strong> Obtain latest TAF/METAR & NOTAMs for ETOPS Enroute Alternates; verify weather above ETOPS planning minima.</div></div>
+      <div class="flow-item" onclick="this.classList.toggle('done')"><div class="flow-check">✓</div><div><strong>ETOPS Entry Point (EEP):</strong> Verify HF1/HF2 SELCAL check (LQ-GK), ADS-C/CPDLC logon, and record ETP1/ETP2 fuel burn comparison.</div></div>
+      <div class="flow-item" onclick="this.classList.toggle('done')"><div class="flow-check">✓</div><div><strong>Waypoint Passing (+10 min):</strong> Plot Master Document position, verify track/distance to next fix, and perform gross-error fuel check.</div></div>
+      <div class="flow-item" onclick="this.classList.toggle('done')"><div class="flow-check">✓</div><div><strong>RVSM Altimeter Cross-Check:</strong> Confirm Left & Right PFD altimeters agree within ±200 ft (and Standby within limits) every hour.</div></div>
+    </div>
+  </section>
+
+  <!-- TAB 6: 2-CREW SHOWDOWN GAME -->
+  <section id="tab-game" class="tab-panel">
+    <div class="card">
+      <h3>Flight Deck Showdown (Pass & Play) <span class="badge">B767 QUIZ</span></h3>
+      <div class="score-board">
+        <div style="text-align:center;"><div style="font-size:11px; color:var(--muted);">CAPTAIN</div><div style="font-size:24px; font-weight:900; color:var(--accent);" id="scoreCapt">0</div></div>
+        <div style="text-align:center;"><div style="font-size:11px; color:var(--gold);">ACTIVE TURN</div><div style="font-size:16px; font-weight:900; color:var(--gold); margin-top:4px;" id="turnLabel">CAPTAIN</div></div>
+        <div style="text-align:center;"><div style="font-size:11px; color:var(--muted);">FIRST OFFICER</div><div style="font-size:24px; font-weight:900; color:var(--accent);" id="scoreFO">0</div></div>
+      </div>
+      <div id="quizBox"></div>
+      <div style="margin-top:12px; display:flex; justify-content:space-between;">
+        <button type="button" class="btn-outline" onclick="resetQuiz()">Reset Scores</button>
+        <button type="button" class="btn" onclick="nextQuestion()">Next Question →</button>
+      </div>
+    </div>
+  </section>
+
+</main>
+
+<script>
+  let currentSeat = 'CAPT';
+  let currentPhase = 0;
+  let drillMode = false;
+
+  // Live UTC Clock
+  function updateClock() {
+    const now = new Date();
+    const h = String(now.getUTCHours()).padStart(2, '0');
+    const m = String(now.getUTCMinutes()).padStart(2, '0');
+    const s = String(now.getUTCSeconds()).padStart(2, '0');
+    document.getElementById('zuluClock').textContent = `UTC ${h}:${m}:${s}Z`;
+  }
+  setInterval(updateClock, 1000);
+  updateClock();
+
+  // Tab Navigation
+  function openTab(tabId, btn) {
+    document.querySelectorAll('.tab-panel').forEach(p => p.classList.remove('active'));
+    document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+    document.getElementById('tab-' + tabId).classList.add('active');
+    if (btn) btn.classList.add('active');
+  }
+
+  // Night Mode
+  function toggleNight() {
+    document.body.classList.toggle('night-mode');
+  }
+
+  // Seat Toggle
+  function setSeat(seat) {
+    currentSeat = seat;
+    document.getElementById('btnCapt').classList.toggle('active', seat === 'CAPT');
+    document.getElementById('btnFO').classList.toggle('active', seat === 'FO');
+    document.getElementById('flowHeaderTitle').textContent = seat === 'CAPT'
+      ? 'Captain Normal Flows (Left-to-Right Scan)'
+      : 'First Officer Normal Flows (Right-to-Left Scan)';
+    renderFlows();
+  }
+
+  // Calculators
+  function calcTOD() {
+    const s = parseFloat(document.getElementById('todStart').value) || 0;
+    const e = parseFloat(document.getElementById('todEnd').value) || 0;
+    const gs = parseFloat(document.getElementById('todGS').value) || 0;
+    const w = parseFloat(document.getElementById('todWind').value) || 0;
+    const altDiff = Math.max(0, (s - e) / 1000);
+    const dist = Math.round((altDiff * 3) + (w / 10));
+    const vs = Math.round((gs / 2) * 10);
+    document.getElementById('todOut').innerHTML = `TOD Distance: <span>${dist} NM</span> &nbsp;|&nbsp; Target V/S: <span>${vs.toLocaleString()} fpm</span>`;
+  }
+
+  function calcWind() {
+    const rwy = parseFloat(document.getElementById('rwyHdg').value) || 0;
+    const dir = parseFloat(document.getElementById('windDir').value) || 0;
+    const spd = parseFloat(document.getElementById('windSpd').value) || 0;
+    const maxLim = parseFloat(document.getElementById('rwyCond').value) || 38;
+    let diff = ((dir - rwy + 540) % 360) - 180;
+    const rad = diff * Math.PI / 180;
+    const xw = Math.round(Math.abs(spd * Math.sin(rad)));
+    const hw = Math.round(spd * Math.cos(rad));
+    const side = diff >= 0 ? 'Right' : 'Left';
+    const hwLabel = hw >= 0 ? `Headwind: <span>${hw} kt</span>` : `Tailwind: <span style="color:var(--red)">${Math.abs(hw)} kt</span>`;
+    const warn = xw > maxLim ? ' ⚠️ EXCEEDS LIMIT' : '';
+    document.getElementById('windOut').innerHTML = `Crosswind: <span>${xw} kt (${side})${warn}</span> &nbsp;|&nbsp; ${hwLabel}`;
+  }
+
+  function calcFuel() {
+    const req = parseFloat(document.getElementById('fuelReq').value) || 0;
+    const rem = parseFloat(document.getElementById('fuelRem').value) || 0;
+    const sg = parseFloat(document.getElementById('fuelSG').value) || 0.8;
+    const upKg = Math.max(0, req - rem);
+    const liters = Math.round(upKg / sg);
+    const usg = Math.round(liters * 0.264172);
+    document.getElementById('fuelLbs').value = Math.round(req * 2.20462).toLocaleString() + ' lbs';
+    document.getElementById('fuelOut').innerHTML = `Uplift Needed: <span>${upKg.toLocaleString()} kg</span> &nbsp;|&nbsp; <span>${liters.toLocaleString()} L</span> (${usg.toLocaleString()} USG)`;
+  }
+
+  function calcISA() {
+    const fl = parseFloat(document.getElementById('isaFL').value) || 0;
+    const oat = parseFloat(document.getElementById('isaOAT').value) || 0;
+    const adTemp = parseFloat(document.getElementById('coldTemp').value) || 0;
+    const hgt = parseFloat(document.getElementById('coldHgt').value) || 0;
+    const alt = fl * 100;
+    const isaStd = Math.max(-56.5, 15 - (1.98 * (alt / 1000)));
+    const dev = Math.round(oat - isaStd);
+    const devStr = dev >= 0 ? `ISA +${dev}°C` : `ISA ${dev}°C`;
+    let coldAdd = 0;
+    if (adTemp < 0) {
+      coldAdd = Math.round(hgt * ((15 - adTemp) / (273 + adTemp)) * 0.85 / 10) * 10;
+    }
+    document.getElementById('isaOut').innerHTML = `ISA Dev: <span>${devStr}</span> &nbsp;|&nbsp; Cold Temp Add: <span>+${coldAdd} ft</span>`;
+  }
+
+  // Scratchpad persistence
+  function saveScratch() {
+    try { localStorage.setItem('nexus767_scratch', document.getElementById('scratchpad').value); } catch(e) {}
+  }
+  try {
+    const saved = localStorage.getItem('nexus767_scratch');
+    if (saved) document.getElementById('scratchpad').value = saved;
+  } catch(e) {}
+
+  // Normal Flows Data
+  const phases = [
+    "1. Prelim Preflight",
+    "2. Preflight Scan",
+    "3. Before Start",
+    "4. After Start",
+    "5. Before Takeoff",
+    "6. Climb & Cruise",
+    "7. Descent & Approach",
+    "8. Shutdown & Secure"
+  ];
+
+  const flowsData = {
+    CAPT: [
+      [
+        { p: "OVERHEAD", t: "IRS Mode Selectors — OFF then NAV (verify ON DC then ALIGN)." },
+        { p: "FORWARD", t: "EFIS / Display Source & Flight Director — Check normal, Master F/D ON." },
+        { p: "PEDESTAL", t: "Parking Brake — Set (verify brake pressure normal); Speedbrake — DOWN." },
+        { p: "PEDESTAL", t: "Fuel Control Switches — CUTOFF; Reverse Thrust Levers — DOWN." }
+      ],
+      [
+        { p: "OVERHEAD L", t: "Hydraulic Panel — L & R Engine Pumps ON, Elec Demand AUTO; Center 1 & 2 OFF." },
+        { p: "OVERHEAD L", t: "Electrical Panel — Battery ON, Standby Power AUTO, Bus Tie AUTO, Gen Cont ON." },
+        { p: "GLARESHIELD", t: "MCP — V2 set, Heading/Track set, Initial Altitude set, LNAV/VNAV armed as briefed." },
+        { p: "FORWARD L", t: "Clock, Airspeed Bugs, Altimeter (QNH), RMI/RDMI, Standby Instruments — Checked." },
+        { p: "CDU", t: "Verify Route, Perf Init, Thrust Limit, and Takeoff V-Speeds with F/O." }
+      ],
+      [
+        { p: "OVERHEAD", t: "Fuel Pumps — All Main Tank Pumps ON (Center Pumps ON if > 450 kg / per SOP)." },
+        { p: "OVERHEAD", t: "Center Hydraulic Elec Pumps 1 & 2 — ON; Anti-Collision Red Beacon — ON." },
+        { p: "PEDESTAL", t: "Trim — Stabilizer Trim set to Green Band units; Aileron & Rudder Trim 0." },
+        { p: "BRIEFING", t: "Call for Before Start Checklist & confirm pushback clearance." }
+      ],
+      [
+        { p: "OVERHEAD", t: "APU Selector — OFF (once engine generators online); Packs — AUTO; Isolation — OFF." },
+        { p: "OVERHEAD", t: "Engine & Wing Anti-Ice — As required; Recall — Press and verify clear." },
+        { p: "FORWARD", t: "Flight Controls Check — Full & free deflection on EICAS Status page." }
+      ],
+      [
+        { p: "OVERHEAD", t: "Landing Lights & Strobe Lights — ON when cleared onto runway." },
+        { p: "GLARESHIELD", t: "Autothrottle ARM — ON; TO/GA — Press at 70% N1 and verify THR REF." },
+        { p: "CALLOUT", t: "Confirm Takeoff Briefing & call 'Before Takeoff Checklist'." }
+      ],
+      [
+        { p: "10,000 FT", t: "Landing Lights — OFF; Seatbelt Signs — As required; Altimeters — STD (1013 hPa) at Transition Alt." },
+        { p: "CRUISE", t: "Monitor step-climb fuel burn, ETOPS ETP fuel margin, and hourly RVSM altimeter cross-check." }
+      ],
+      [
+        { p: "TOD", t: "Review STAR, approach minima, autobrake setting, and missed approach altitude." },
+        { p: "TRANSITION", t: "Set Local QNH at Transition Level; cross-check L/R/Standby altimeters." },
+        { p: "FINAL", t: "Verify Gear Down (3 Green), Flaps 25/30, Speedbrake ARMED, Landing Checklist complete." }
+      ],
+      [
+        { p: "PEDESTAL", t: "Parking Brake — SET; Fuel Control Switches — CUTOFF; Speedbrake — DOWN." },
+        { p: "OVERHEAD", t: "Seatbelt Sign — OFF; Beacon — OFF; Fuel Pumps — OFF (leave L Aft ON if APU running)." },
+        { p: "SECURE", t: "IRS Selectors — OFF; Emergency Exit Lights — OFF; Packs — OFF; Battery — OFF." }
+      ]
+    ],
+    FO: [
+      [
+        { p: "OVERHEAD R", t: "Yaw Dampers L & R — ON; Emergency Exit Lights — ARMED; Passenger Signs — ON." },
+        { p: "OVERHEAD R", t: "Window Heat — ON; Probe Heat — AUTO; Pack Controls — AUTO; Bleed Air — ON." },
+        { p: "PEDESTAL", t: "Transponder — STBY; TCAS — Test; VHF/HF Radios & SELCAL (LQ-GK) — Set." },
+        { p: "CDU", t: "Check IDENT page (Nav Data dates, GE CF6-80C2 engine rating) & POS INIT." }
+      ],
+      [
+        { p: "OVERHEAD R→L", t: "Scan right-to-left: Air Conditioning, Bleed Air, Pressurization (Landing Alt set), Anti-Ice." },
+        { p: "OVERHEAD", t: "Fuel Panel — Crossfeed OFF, Fuel Temp check; APU — Start if required (L Aft Pump ON)." },
+        { p: "GLARESHIELD", t: "MCP — Verify F/D ON, Bank Limit AUTO, Minimums (BARO/RADIO) set on EFIS." },
+        { p: "FORWARD R", t: "EICAS Recall — Check status/messages; Gear Lever — DOWN (3 Green); Autobrake — RTO." },
+        { p: "CDU", t: "Enter RTE, PERF INIT (ZFW, Reserves, Cost Index, CRZ ALT), THRUST LIM & TAKEOFF REF." }
+      ],
+      [
+        { p: "OVERHEAD", t: "Verify Doors Closed on EICAS; Pressurization auto-schedule confirmed." },
+        { p: "CDU", t: "Verify Takeoff V-Speeds (V1, VR, V2) displayed on PFD speed tape." },
+        { p: "PEDESTAL", t: "Transponder — XPDR / TA-RA per airport procedure; read Before Start Checklist." }
+      ],
+      [
+        { p: "PEDESTAL", t: "Flaps — Set Takeoff Flaps (5 or 15); verify flap indicator & EICAS." },
+        { p: "FORWARD", t: "Recall — Press CANC/RCL; verify flight controls during Captain's check." },
+        { p: "COMMS", t: "Obtain taxi clearance & read After Start Checklist." }
+      ],
+      [
+        { p: "OVERHEAD", t: "Transponder — TA/RA; Weather Radar — ON / Tilt set." },
+        { p: "MONITOR", t: "Verify N1 symmetry, call '80 Knots', 'V1', 'Rotate', 'Positive Rate' → Gear UP." }
+      ],
+      [
+        { p: "10,000 FT", t: "Altimeters — STD (1013 hPa); Cabin/Crew check; review ETOPS alternate weather." },
+        { p: "OCEANIC", t: "Log waypoint ATA, fuel remaining, and track check +10 mins after every fix." }
+      ],
+      [
+        { p: "DESCENT", t: "Obtain destination ATIS, enter VREF & landing wind in CDU APPROACH REF." },
+        { p: "APPROACH", t: "Callout flap speeds, set Missed Approach Altitude once glideslope/path captured." },
+        { p: "LANDING", t: "Monitor spoilers deploy, reverse thrust green, and call '60 Knots' on rollout." }
+      ],
+      [
+        { p: "OVERHEAD R", t: "Center Hyd Elec Pumps 1 & 2 — OFF; Window Heat — OFF; Galley Power — OFF." },
+        { p: "PEDESTAL", t: "Flaps — UP; Transponder — STBY; Weather Radar — OFF; Flight Deck Door — UNLOCKED." },
+        { p: "SECURE", t: "Confirm External Power/APU disconnected before Battery OFF; complete Secure Checklist." }
+      ]
+    ]
+  };
+
+  let completedFlows = {};
+
+  function renderFlows() {
+    const pillsDiv = document.getElementById('phasePills');
+    pillsDiv.innerHTML = phases.map((ph, idx) =>
+      `<button type="button" class="pill ${idx === currentPhase ? 'active' : ''}" onclick="selectPhase(${idx})">${ph}</button>`
+    ).join('');
+
+    const items = flowsData[currentSeat][currentPhase];
+    const listDiv = document.getElementById('flowList');
+    listDiv.innerHTML = items.map((item, idx) => {
+      const key = `${currentSeat}-${currentPhase}-${idx}`;
+      const isDone = !!completedFlows[key];
+      return `<div class="flow-item ${isDone ? 'done' : ''}" onclick="toggleFlow('${key}')">
+        <div class="flow-check">${isDone ? '✓' : ''}</div>
+        <div><span class="panel-tag">${item.p}</span>${item.t}</div>
+      </div>`;
+    }).join('');
+  }
+
+  function selectPhase(idx) {
+    currentPhase = idx;
+    renderFlows();
+  }
+
+  function toggleFlow(key) {
+    completedFlows[key] = !completedFlows[key];
+    renderFlows();
+  }
+
+  function resetFlows() {
+    completedFlows = {};
+    renderFlows();
+  }
+
+  // Memory Items Data
+  const memoryItems = [
+    {
+      title: "1. ABORTED ENGINE START",
+      trigger: "No N1 rotation, no EGT rise, hung start, or EGT exceeds start limit.",
+      steps: [
+        "Fuel Control Switch (affected engine) — CUTOFF"
+      ]
+    },
+    {
+      title: "2. CABIN ALTITUDE WARNING / RAPID DEPRESSURIZATION",
+      trigger: "Cabin altitude warning horn sounds or cabin altitude exceeds 10,000 ft.",
+      steps: [
+        "Oxygen Masks & Regulators — ON, 100%",
+        "Crew Communications — ESTABLISH",
+        "Check Cabin Altitude and Rate — If uncontrolled, initiate Emergency Descent (Passenger Signs ON, Thrust Levers IDLE, Speedbrake FLIGHT DETENT, Descend to 10,000 ft or MEA)."
+      ]
+    },
+    {
+      title: "3. ENGINE FIRE, SEVERE DAMAGE, OR SEPARATION",
+      trigger: "Engine fire warning, severe airframe vibration, or sudden loss of engine indications.",
+      steps: [
+        "Autothrottle ARM Switch — OFF",
+        "Thrust Lever (affected engine) — IDLE",
+        "Fuel Control Switch (affected engine) — CUTOFF",
+        "Engine Fire Switch (affected engine) — PULL (If Fire warning remains: Rotate to stop and hold 1 sec)."
+      ]
+    },
+    {
+      title: "4. ENGINE LIMIT, SURGE, OR STALL",
+      trigger: "Loud bangs, fluctuating EGT/N1, or engine parameter exceeding redline.",
+      steps: [
+        "Autothrottle ARM Switch — OFF",
+        "Thrust Lever (affected engine) — Retard until indications stay within limits or lever is at IDLE."
+      ]
+    },
+    {
+      title: "5. DUAL ENGINE FAILURE",
+      trigger: "Loss of thrust on both engines.",
+      steps: [
+        "Fuel Control Switches (Both) — CUTOFF, then RUN",
+        "Ram Air Turbine (RAT) — UNLOCK (if both AC transfer buses unpowered)"
+      ]
+    },
+    {
+      title: "6. AIRSPEED UNRELIABLE / IAS DISAGREE",
+      trigger: "Erratic airspeed indications, IAS DISAGREE message, or simultaneous overspeed & stick shaker.",
+      steps: [
+        "Autopilot — DISENGAGE",
+        "Autothrottle — DISENGAGE",
+        "Flight Directors (Both) — OFF",
+        "Pitch Attitude & Thrust — Set per Unreliable Airspeed table (e.g., 10° / 85% N1 on takeoff; 4° / 75% N1 clean)."
+      ]
+    },
+    {
+      title: "7. UNSCHEDULED STABILIZER TRIM",
+      trigger: "Continuous uncommanded stabilizer trim movement.",
+      steps: [
+        "Control Column — HOLD FIRMLY",
+        "Autopilot — DISENGAGE",
+        "Stabilizer Trim Cutout Switches (Both) — CUTOUT"
+      ]
+    }
+  ];
+
+  function renderMemory() {
+    const container = document.getElementById('memoryContainer');
+    container.innerHTML = memoryItems.map((m, i) => `
+      <div class="mem-card">
+        <div class="mem-title"><span>${m.title}</span><span class="badge">MEMORY</span></div>
+        <div style="font-size:12px; color:var(--gold); margin-bottom:8px;"><strong>Condition:</strong> ${m.trigger}</div>
+        <ol class="mem-steps ${drillMode ? 'blurred' : ''}" id="mem-steps-${i}" onclick="this.classList.remove('blurred')">
+          ${m.steps.map(s => `<li><strong>${s}</strong></li>`).join('')}
+        </ol>
+      </div>
+    `).join('');
+  }
+
+  function toggleDrillMode() {
+    drillMode = !drillMode;
+    document.getElementById('drillToggleBtn').textContent = drillMode ? 'Show All Answers' : 'Enable Recall Drill (Blur Steps)';
+    renderMemory();
+  }
+
+  // Quick Read Guide Search
+  function filterGuide() {
+    const q = document.getElementById('guideSearch').value.toLowerCase();
+    document.querySelectorAll('.guide-block').forEach(block => {
+      block.style.display = block.textContent.toLowerCase().includes(q) ? 'block' : 'none';
+    });
+  }
+
+  // Flight Timer
+  let timerSec = 0;
+  let timerInt = null;
+  function updateTimerDisplay() {
+    const h = String(Math.floor(timerSec / 3600)).padStart(2, '0');
+    const m = String(Math.floor((timerSec % 3600) / 60)).padStart(2, '0');
+    const s = String(timerSec % 60).padStart(2, '0');
+    document.getElementById('flightTimerDisplay').textContent = `${h}:${m}:${s}`;
+  }
+  function startTimer() {
+    if (!timerInt) {
+      timerInt = setInterval(() => { timerSec++; updateTimerDisplay(); }, 1000);
+    }
+  }
+  function pauseTimer() {
+    clearInterval(timerInt);
+    timerInt = null;
+  }
+  function resetTimer() {
+    pauseTimer();
+    timerSec = 0;
+    updateTimerDisplay();
+  }
+
+  // Crew Rest Calculator
+  function calcRest() {
+    const total = parseInt(document.getElementById('restTotal').value) || 0;
+    const crew = parseInt(document.getElementById('restCrew').value) || 3;
+    const buf = parseInt(document.getElementById('restBuf').value) || 0;
+    const startStr = document.getElementById('restStart').value || '00:00';
+    const parts = startStr.split(':');
+    let startMin = (parseInt(parts[0]) || 0) * 60 + (parseInt(parts[1]) || 0);
+
+    const splits = 2;
+    const each = Math.max(0, Math.floor((total - buf) / splits));
+
+    function fmt(mins) {
+      const m = ((mins % 1440) + 1440) % 1440;
+      return String(Math.floor(m / 60)).padStart(2, '0') + ':' + String(m % 60).padStart(2, '0');
+    }
+
+    const b1Start = startMin;
+    const b1End = b1Start + each;
+    const b2Start = b1End + buf;
+    const b2End = b2Start + each;
+
+    const label1 = crew === 3 ? 'Rest 1 (Relief Pilot)' : 'Rest 1 (Pair A)';
+    const label2 = crew === 3 ? 'Rest 2 (Operating Pilot)' : 'Rest 2 (Pair B)';
+
+    document.getElementById('restOut').innerHTML =
+      `${label1}: <span>${fmt(b1Start)} – ${fmt(b1End)} (${each} mins)</span><br>` +
+      `${label2}: <span>${fmt(b2Start)} – ${fmt(b2End)} (${each} mins)</span>`;
+  }
+
+  // 2-Crew Trivia Quiz
+  const questions = [
+    { q: "Which fuel tank supplies the APU on the Boeing 767-300?", opts: ["Center Tank", "Left Main Tank", "Right Main Tank", "Left Surge Tank"], ans: 1 },
+    { q: "What is the approximate pitch attitude for a tailstrike on the B767-300 with main gear struts compressed?", opts: ["7.5°", "9.5°", "11.5°", "13.0°"], ans: 1 },
+    { q: "What is the maximum dry runway crosswind guideline for the Boeing 767-300?", opts: ["29 knots", "33 knots", "38 knots", "42 knots"], ans: 2 },
+    { q: "During an Aborted Engine Start, what is the sole QRH Memory Item?", opts: ["Engine Fire Switch — PULL", "Fuel Control Switch — CUTOFF", "APU Selector — OFF", "Pack Controls — OFF"], ans: 1 },
+    { q: "In RVSM airspace, what is the maximum allowable difference between Left and Right PFD altimeters in cruise?", opts: ["±75 ft", "±100 ft", "±200 ft", "±250 ft"], ans: 2 },
+    { q: "What is ZS-NEX's assigned SELCAL code?", opts: ["LQ-GK", "GR-KM", "AB-CD", "NX-76"], ans: 0 },
+    { q: "During Unscheduled Stabilizer Trim, after holding the control column and disengaging the Autopilot, what is the final memory action?", opts: ["Pull Stabilizer Trim Circuit Breakers", "Stabilizer Trim Cutout Switches (Both) — CUTOUT", "Select Alternate Flaps", "Reduce Airspeed below 250 kt"], ans: 1 },
+    { q: "Why are Center Hydraulic Electric Pumps 1 and 2 kept OFF until Before Start pushback?", opts: ["To save APU bleed air", "To prevent hydraulic fluid overheat", "To keep nosewheel steering depressurized", "To avoid triggering EICAS Config warning"], ans: 1 }
+  ];
+
+  let qIdx = 0;
+  let turn = 'CAPT';
+  let scores = { CAPT: 0, FO: 0 };
+  let answered = false;
+
+  function renderQuiz() {
+    answered = false;
+    const item = questions[qIdx];
+    document.getElementById('turnLabel').textContent = turn === 'CAPT' ? 'CAPTAIN' : 'FIRST OFFICER';
+    document.getElementById('quizBox').innerHTML = `
+      <div style="font-size:15px; font-weight:800; margin-bottom:12px;">Q${qIdx + 1}/${questions.length}: ${item.q}</div>
+      ${item.opts.map((opt, idx) => `<button type="button" class="quiz-opt" onclick="answerQuiz(${idx}, this)">${opt}</button>`).join('')}
+    `;
+  }
+
+  function answerQuiz(idx, btn) {
+    if (answered) return;
+    answered = true;
+    const correct = questions[qIdx].ans;
+    const allBtns = document.querySelectorAll('.quiz-opt');
+    if (idx === correct) {
+      btn.classList.add('correct');
+      scores[turn]++;
+      document.getElementById('scoreCapt').textContent = scores.CAPT;
+      document.getElementById('scoreFO').textContent = scores.FO;
+    } else {
+      btn.classList.add('wrong');
+      allBtns[correct].classList.add('correct');
+    }
+  }
+
+  function nextQuestion() {
+    qIdx = (qIdx + 1) % questions.length;
+    turn = turn === 'CAPT' ? 'FO' : 'CAPT';
+    renderQuiz();
+  }
+
+  function resetQuiz() {
+    scores = { CAPT: 0, FO: 0 };
+    qIdx = 0;
+    turn = 'CAPT';
+    document.getElementById('scoreCapt').textContent = '0';
+    document.getElementById('scoreFO').textContent = '0';
+    renderQuiz();
+  }
+
+  // Initialize all modules
+  calcTOD();
+  calcWind();
+  calcFuel();
+  calcISA();
+  renderFlows();
+  renderMemory();
+  calcRest();
+  renderQuiz();
+</script>
+</body>
+</html>
